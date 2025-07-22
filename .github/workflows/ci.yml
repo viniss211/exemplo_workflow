@@ -1,0 +1,33 @@
+name: Pipeline de Testes Cypress
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Clonar o repositório
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Instalar dependências
+        run: npm install
+
+      - name: 🚀 Rodar servidor local em segundo plano
+        run: npx serve . --port 3000 &
+      
+      - name: 🧪 Executar testes com Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          start: npx serve . --port 3000
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 30
