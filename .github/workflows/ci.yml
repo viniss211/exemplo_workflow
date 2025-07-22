@@ -20,14 +20,11 @@ jobs:
           node-version: '18'
 
       - name: 📦 Instalar dependências
-        run: npm install
+        run: npm ci
 
-      - name: 🚀 Rodar servidor local em segundo plano
-        run: npx serve . --port 3000 &
-      
-      - name: 🧪 Executar testes com Cypress
+      - name: 🧪 Rodar Cypress com servidor
         uses: cypress-io/github-action@v6
         with:
-          start: npx serve . --port 3000
+          start: npx serve . -l 3000
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 30
