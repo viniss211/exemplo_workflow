@@ -1,9 +1,16 @@
-import { defineConfig } from "cypress";
+const { defineConfig } = require('cypress');
 
-export default defineConfig({
+module.exports = defineConfig({
   e2e: {
-    baseUrl: "http://localhost:3000",
-    viewportWidth: 1000,
-    viewportHeight: 800,
+    setupNodeEvents(on, config) {
+      require('cypress-mochawesome-reporter/plugin')(on);
+    },
+    reporter: 'cypress-mochawesome-reporter',
+    reporterOptions: {
+      reportDir: 'cypress/reports',
+      overwrite: false,
+      html: true,
+      json: true
+    },
   },
 });

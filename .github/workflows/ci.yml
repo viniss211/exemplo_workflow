@@ -1,11 +1,3 @@
-name: Pipeline de Testes Cypress
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,12 +12,31 @@ jobs:
           node-version: '18'
 
       - name: 📦 Instalar dependências
-        run: npm ci
+        run: npm install
 
-      - name: 🧪 Rodar Cypress com servidor
-        uses: cypress-io/github-action@v6
+      - name: 🧪 Rodar Cypress com Mochawesome
+        run: npx cypress run
+
+      - name: 🗃️ Gerar HTML final do relatório
+        run: |
+          npx mochawesome-merge cypress/reports/*.json > cypress/reports/merged.json
+          npx marge cypress/reports/merged.json -f report -o cypress/reports/html
+
+      - name: 📤 Upload do relatório de testes
+        uses: actions/upload-artifact@v3
         with:
-          start: npx serve . -l 3000
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 30
+          name: relatorio-teste
+          path: cypress/reports/html/
 
+      - name: 📧 Enviar relatório por e-mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: "📊 Relatório de testes Cypress"
+          to: "destinatario@exemplo.com"
+          from: "CI Bot <seubot@exemplo.com>"
+          body: "Segue em anexo o relatório de testes Cypress."
+          attachments: cypress/reports/html/report.html
