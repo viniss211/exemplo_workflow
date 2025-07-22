@@ -28,3 +28,4 @@ jobs:
           start: npx serve . -l 3000
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 30
+
