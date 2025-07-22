@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Produtos</title>
+</head>
+<body>
+  <h1>Lista de Produtos</h1>
+
+  <!-- Formulário para adicionar produto -->
+  <form id="form-produto">
+    <input type="text" id="nome-produto" placeholder="Nome do produto" required />
+    <input type="number" id="preco-produto" placeholder="Preço" required step="0.01" />
+    <button type="submit">Adicionar Produto</button>
+  </form>
+
+  <ul id="lista-produtos"></ul>
+
+
+  <script>
+
+// Simula uma listagem de produtos e insere no HTML
+document.addEventListener('DOMContentLoaded', () => {
+  const produtos = [
+    { id: 1, nome: 'Camiseta Azul', preco: 59.9 },
+    { id: 2, nome: 'Tênis Branco', preco: 199.9 },
+    { id: 3, nome: 'Relógio Digital', preco: 349.9 }
+  ];
+
+  const lista = document.getElementById('lista-produtos');
+  const form = document.getElementById('form-produto');
+  const nomeInput = document.getElementById('nome-produto');
+  const precoInput = document.getElementById('preco-produto');
+
+  function renderizarProdutos() {
+    lista.innerHTML = '';
+    produtos.forEach((produto, index) => {
+      const item = document.createElement('li');
+      item.innerHTML = `${produto.nome} - R$ ${produto.preco.toFixed(2)} <button data-index="${index}" class="remover">❌</button>`;
+      lista.appendChild(item);
+    });
+  }
+
+  lista.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remover')) {
+      const index = e.target.getAttribute('data-index');
+      produtos.splice(index, 1);
+      renderizarProdutos();
+    }
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = nomeInput.value.trim();
+    const preco = parseFloat(precoInput.value);
+    if (nome && !isNaN(preco)) {
+      produtos.push({ nome, preco });
+      renderizarProdutos();
+      nomeInput.value = '';
+      precoInput.value = '';
+    }
+  });
+
+  renderizarProdutos();
+});
+
+  </script>
+</body>
+</html>
