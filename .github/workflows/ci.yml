@@ -34,7 +34,7 @@ jobs:
           npx marge cypress/reports/merged.json -f report -o cypress/reports/html
 
       - name: 📤 Upload do relatório de testes
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: relatorio-teste
           path: cypress/reports/html/
