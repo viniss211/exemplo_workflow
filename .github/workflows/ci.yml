@@ -1,9 +1,17 @@
+name: Pipeline de Testes Cypress
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Clonar o repositório
+      - name: 📦 Clonar o repositórios
         uses: actions/checkout@v3
 
       - name: 🟢 Setup Node.js
@@ -13,6 +21,9 @@ jobs:
 
       - name: 📦 Instalar dependências
         run: npm install
+
+      - name: 🚀 Rodar servidor local
+        run: npx serve . -l 3000 &
 
       - name: 🧪 Rodar Cypress com Mochawesome
         run: npx cypress run
@@ -36,7 +47,7 @@ jobs:
           username: ${{ secrets.EMAIL_USER }}
           password: ${{ secrets.EMAIL_PASS }}
           subject: "📊 Relatório de testes Cypress"
-          to: "destinatario@exemplo.com"
+          to: "seuemail@exemplo.com"
           from: "CI Bot <seubot@exemplo.com>"
           body: "Segue em anexo o relatório de testes Cypress."
           attachments: cypress/reports/html/report.html
