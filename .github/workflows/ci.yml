@@ -30,7 +30,7 @@ jobs:
 
       - name: 🗃️ Gerar HTML final do relatório
         run: |
-          npx mochawesome-merge $(find cypress/reports -name '*.json') > cypress/reports/merged.json
+          npx mochawesome-merge "cypress/reports/mochawesome-report/*.json" > cypress/reports/merged.json
           npx marge cypress/reports/merged.json -f report -o cypress/reports/html
 
 
